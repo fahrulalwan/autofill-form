@@ -30,22 +30,22 @@ function parseCookies(response: string[]): Map<string, string> {
 }
 
 (async () => {
-  const [/* fifGroupFormResponse, */JPSHealthWebsite] = await Promise.all([
-    // fetch('http://fifgroup-form.fifgroup.co.id:5000/fifgrouphealthsurvey', {
-    //   headers: {
-    //     accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
-    //     'accept-language': 'id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7,pt;q=0.6',
-    //     'cache-control': 'max-age=0',
-    //     'content-type': 'application/x-www-form-urlencoded',
-    //     'upgrade-insecure-requests': '1',
-    //     cookie: 'session=eyJjc3JmX3Rva2VuIjp7IiBiIjoiTW1Ka1kyUXhNR1UxWkRsaFpEaG1aRFl4T1Rjd1kyRmhOVGt6T1dRNVpUazBNekV3WldNM1l3PT0ifX0.X7FjVg.L75LkBbKfX5XHwE8tvSuM-Wj7VE',
-    //   },
-    //   referrer: 'http://fifgroup-form.fifgroup.co.id:5000/fifgrouphealthsurvey',
-    //   referrerPolicy: 'strict-origin-when-cross-origin',
-    //   body: `kehadiran=Kerja+Dirumah&statkar=Head+Office&npk=${IDENTITY.npk}&nama=${IDENTITY.name.toUpperCase().replace(' ', '+')}&koncov=tidak&suhuself=%3C37.3+C&kondisi=Sehat&zona=Tidak&zonaya=&koncovfam=tidak&kondisifam=Sehat&zonafam=Tidak&txtzonayafam=&accept=Ya`,
-    //   method: 'POST',
-    //   mode: 'cors',
-    // }),
+  const [fifGroupFormResponse, JPSHealthWebsite] = await Promise.all([
+    fetch('http://fifgroup-form.fifgroup.co.id:5000/fifgrouphealthsurvey', {
+      headers: {
+        accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+        'accept-language': 'id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7,pt;q=0.6',
+        'cache-control': 'max-age=0',
+        'content-type': 'application/x-www-form-urlencoded',
+        'upgrade-insecure-requests': '1',
+        cookie: 'session=eyJjc3JmX3Rva2VuIjp7IiBiIjoiTW1Ka1kyUXhNR1UxWkRsaFpEaG1aRFl4T1Rjd1kyRmhOVGt6T1dRNVpUazBNekV3WldNM1l3PT0ifX0.X7FjVg.L75LkBbKfX5XHwE8tvSuM-Wj7VE',
+      },
+      referrer: 'http://fifgroup-form.fifgroup.co.id:5000/fifgrouphealthsurvey',
+      referrerPolicy: 'strict-origin-when-cross-origin',
+      body: `kehadiran=Kerja+Dirumah&statkar=Head+Office&npk=${IDENTITY.npk}&nama=${IDENTITY.name.toUpperCase().replace(' ', '+')}&koncov=tidak&suhuself=%3C37.3+C&kondisi=Sehat&zona=Tidak&zonaya=&koncovfam=tidak&kondisifam=Sehat&zonafam=Tidak&txtzonayafam=&accept=Ya`,
+      method: 'POST',
+      mode: 'cors',
+    }),
     // OPEN WEBSITE JPS HEALTH
     fetch('https://forms.office.com/Pages/ResponsePage.aspx?id=a7HHR4LUR0GyGgSTbdiYdXsUGhGAT-hLkJiEhsyHPVRUNUoyS1ZaWkRKOFRHR1JSWVJRRUUxVEJMVi4u', {
       headers: {
@@ -124,4 +124,7 @@ function parseCookies(response: string[]): Map<string, string> {
     method: 'POST',
     mode: 'cors',
   });
+
+  const result = await Promise.all([fifGroupFormResponse.text(), JPSHealthResponse.json()]);
+  console.log(result);
 })();
