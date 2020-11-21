@@ -16,6 +16,7 @@
     "node-fetch": "^2.6.1"
   },
   "scripts": {
+    "compile": "tsc",
     "run": "tsc && node dist/greeter.js"
   }
 }
