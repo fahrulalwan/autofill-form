@@ -17,6 +17,6 @@
   },
   "scripts": {
     "compile": "tsc",
-    "run": "tsc && node dist/greeter.js"
+    "test": "tsc && node dist/greeter.js"
   }
 }
