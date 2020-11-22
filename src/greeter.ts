@@ -105,9 +105,9 @@ function parseCookies(response: string[]): Map<string, string> {
     ]);
 
     // const result = await Promise.all([fifGroupFormResponse.text(), JPSHealthResponse.json()]);
-    // console.log(result);
+    console.log('Tasks successful at: ', todayInDate);
   } catch (e) {
-    console.log('Tasks failed at ', todayInDate);
+    console.log('Tasks failed at: ', todayInDate);
     console.error(e);
   }
 })();
