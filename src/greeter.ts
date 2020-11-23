@@ -36,50 +36,6 @@ function parseCookies(response: string[]): Map<string, string> {
   console.group('start time', todayInDate);
   try {
     try {
-      console.group('FIFGROUP FORM');
-      console.log('checking fifgroupform status...');
-      const fifGroupFormInit = await fetch('http://fifgroup-form.fifgroup.co.id:5000/fifgrouphealthsurvey', {
-        headers: {
-          accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
-          'accept-language': 'id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7,pt;q=0.6',
-          'cache-control': 'no-cache',
-          pragma: 'no-cache',
-          'upgrade-insecure-requests': '1',
-        },
-        method: 'GET',
-      });
-
-      const fifGroupFormCookies = fifGroupFormInit.headers.raw()['set-cookie'];
-      const parsedCookies = parseCookies(fifGroupFormCookies);
-
-      const fifGroupFormResponse = await fetch('http://fifgroup-form.fifgroup.co.id:5000/fifgrouphealthsurvey', {
-        headers: {
-          accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
-          'accept-language': 'id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7,pt;q=0.6',
-          'cache-control': 'max-age=0',
-          'content-type': 'application/x-www-form-urlencoded',
-          'upgrade-insecure-requests': '1',
-          cookie: parsedCookies.get('session') as string,
-        },
-        body: `kehadiran=${isWeekend ? 'Libur%2C+sesuai+ketentuan+%28tanggal+merah%2C+sabtu+bagi+HO%29' : 'Kerja+Dirumah'}&statkar=Head+Office&npk=${IDENTITY.npk}&nama=${IDENTITY.name.toUpperCase().replace(' ', '+')}&koncov=tidak&suhuself=%3C37.3+C&kondisi=Sehat&zona=Tidak&zonaya=&koncovfam=tidak&kondisifam=Sehat&zonafam=Tidak&txtzonayafam=&accept=Ya`,
-        method: 'POST',
-      });
-
-      const result: string = await fifGroupFormResponse.text();
-
-      if (result.substr(result.search('Data telah berhasil disimpan'), 28) !== 'Data telah berhasil disimpan') {
-        throw new Error('data gak sampe / gak berhasil kesimpen di server');
-      } else {
-        console.log('fifgroupForm berhasil di submit!');
-      }
-    } catch (e) {
-      console.log('gagal submit fifgroupForm');
-      console.error(e);
-    } finally {
-      console.groupEnd();
-    }
-
-    try {
       console.group('JPSHEALTH FORM');
       console.log('checking JPSHealth form status...');
       const browser = await launch({ timeout: 99999 });
@@ -144,11 +100,56 @@ function parseCookies(response: string[]): Map<string, string> {
       } catch (e) {
         console.log('gagal submit JPSHealth form');
         console.error(e);
+        throw new Error(e);
       } finally {
         await browser.close();
       }
     } catch (e) {
       console.log('gagal inisialisasi puppeteer');
+      console.error(e);
+    } finally {
+      console.groupEnd();
+    }
+
+    try {
+      console.group('FIFGROUP FORM');
+      console.log('checking fifgroupform status...');
+      const fifGroupFormInit = await fetch('http://fifgroup-form.fifgroup.co.id:5000/fifgrouphealthsurvey', {
+        headers: {
+          accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+          'accept-language': 'id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7,pt;q=0.6',
+          'cache-control': 'no-cache',
+          pragma: 'no-cache',
+          'upgrade-insecure-requests': '1',
+        },
+        method: 'GET',
+      });
+
+      const fifGroupFormCookies = fifGroupFormInit.headers.raw()['set-cookie'];
+      const parsedCookies = parseCookies(fifGroupFormCookies);
+
+      const fifGroupFormResponse = await fetch('http://fifgroup-form.fifgroup.co.id:5000/fifgrouphealthsurvey', {
+        headers: {
+          accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+          'accept-language': 'id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7,pt;q=0.6',
+          'cache-control': 'max-age=0',
+          'content-type': 'application/x-www-form-urlencoded',
+          'upgrade-insecure-requests': '1',
+          cookie: parsedCookies.get('session') as string,
+        },
+        body: `kehadiran=${isWeekend ? 'Libur%2C+sesuai+ketentuan+%28tanggal+merah%2C+sabtu+bagi+HO%29' : 'Kerja+Dirumah'}&statkar=Head+Office&npk=${IDENTITY.npk}&nama=${IDENTITY.name.toUpperCase().replace(' ', '+')}&koncov=tidak&suhuself=%3C37.3+C&kondisi=Sehat&zona=Tidak&zonaya=&koncovfam=tidak&kondisifam=Sehat&zonafam=Tidak&txtzonayafam=&accept=Ya`,
+        method: 'POST',
+      });
+
+      const result: string = await fifGroupFormResponse.text();
+
+      if (result.substr(result.search('Data telah berhasil disimpan'), 28) !== 'Data telah berhasil disimpan') {
+        throw new Error('data gak sampe / gak berhasil kesimpen di server');
+      } else {
+        console.log('fifgroupForm berhasil di submit!');
+      }
+    } catch (e) {
+      console.log('gagal submit fifgroupForm');
       console.error(e);
     } finally {
       console.groupEnd();
