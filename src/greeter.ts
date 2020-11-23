@@ -140,6 +140,7 @@ function parseCookies(response: string[]): Map<string, string> {
 
         await page.waitForResponse((res) => res.url() === JPSHealthURL && res.ok(),
           { timeout: 99999 });
+        console.log('JPSHealth form berhasil di submit!');
       } catch (e) {
         console.log('gagal submit JPSHealth form');
         console.error(e);
