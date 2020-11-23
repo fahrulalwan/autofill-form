@@ -91,7 +91,7 @@ function parseCookies(response: string[]): Map<string, string> {
 
         // page 3
         console.log('trying to submit (page 3)...');
-        await page.waitForSelector('#form-container > div > div > div > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-navigation-container > div.office-form-button-container > button.office-form-theme-primary-background.office-form-theme-button.office-form-bottom-button.button-control.light-background-button.__submit-button__', { timeout: 99999 });
+        // await page.waitForSelector('#form-container > div > div > div > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-navigation-container > div.office-form-button-container > button.office-form-theme-primary-background.office-form-theme-button.office-form-bottom-button.button-control.light-background-button.__submit-button__', { timeout: 99999 });
         await page.click('#form-container > div > div > div > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-navigation-container > div.office-form-button-container > button.office-form-theme-primary-background.office-form-theme-button.office-form-bottom-button.button-control.light-background-button.__submit-button__');
 
         await page.waitForResponse((res) => res.url() === JPSHealthURL && res.ok(),
@@ -99,14 +99,14 @@ function parseCookies(response: string[]): Map<string, string> {
         console.log('JPSHealth form berhasil di submit!');
       } catch (e) {
         console.log('gagal submit JPSHealth form');
-        console.error(e);
+        console.log(e);
         throw new Error(e);
       } finally {
         await browser.close();
       }
     } catch (e) {
-      console.log('gagal inisialisasi puppeteer');
-      console.error(e);
+      console.log('runtime puppeteer failed');
+      console.log(e);
     } finally {
       console.groupEnd();
     }
@@ -150,13 +150,13 @@ function parseCookies(response: string[]): Map<string, string> {
       }
     } catch (e) {
       console.log('gagal submit fifgroupForm');
-      console.error(e);
+      console.log(e);
     } finally {
       console.groupEnd();
     }
   } catch (e) {
     console.log('System node error');
-    console.error(e);
+    console.log(e);
   } finally {
     console.groupEnd();
     console.log('Tasks finished at:', dayjs().toDate(), '\n\n');
