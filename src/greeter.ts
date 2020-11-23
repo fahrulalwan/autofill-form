@@ -158,6 +158,6 @@ function parseCookies(response: string[]): Map<string, string> {
     console.error(e);
   } finally {
     console.groupEnd();
-    console.log('Tasks finished at:', dayjs().toDate());
+    console.log('Tasks finished at:', dayjs().toDate(), '\n\n');
   }
 })();

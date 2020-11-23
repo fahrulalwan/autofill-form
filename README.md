@@ -6,4 +6,5 @@ Project ini dibuat untuk mengisi waktu luang dan menghindari keteledoran lupa ab
 
  - Typescript (saya mau coba bikin repo typescript dari scratch)
  - Node-fetch (library fetch untuk node.js)
+ - Puppeteer (library untuk automated testing)
  - Node 14 (cobain latest version)
