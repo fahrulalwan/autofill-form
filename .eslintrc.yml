@@ -9,4 +9,5 @@ parserOptions:
   ecmaVersion: 11
 plugins:
   - '@typescript-eslint'
-rules: {}
+rules:
+  no-console: off
