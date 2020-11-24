@@ -45,7 +45,7 @@ function parseCookies(response: string[]): Map<string, string> {
 
         page.on('request', (request) => {
           if (request.url() === JPSHealthURL) {
-            const responseData = JSON.parse(<string>request.postData());
+            const responseData = JSON.parse(request.postData() as string);
             responseData.submitDate = momentsLater.toISOString();
             responseData.startDate = todayInDate.toISOString();
             // responseData.answers = JSON.stringify(JSON.parse(responseData.answers));
