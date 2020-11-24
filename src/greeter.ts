@@ -48,9 +48,26 @@ function parseCookies(response: string[]): Map<string, string> {
             const responseData = JSON.parse(<string>request.postData());
             responseData.submitDate = momentsLater.toISOString();
             responseData.startDate = todayInDate.toISOString();
+            // responseData.answers = JSON.stringify(JSON.parse(responseData.answers));
             request.continue({ postData: JSON.stringify(responseData) });
           } else {
             request.continue();
+          }
+        });
+
+        page.on('response', async (response) => {
+          if (response.url() === JPSHealthURL) {
+            switch (response.status()) {
+              case 200:
+                console.log('JPSHealth form berhasil di submit!');
+                break;
+              case 400:
+                console.log('JPSHealth form has reached its submission limit.');
+                break;
+              default:
+                console.log('Unknown response reached, status: ', response.status());
+                break;
+            }
           }
         });
 
@@ -91,17 +108,17 @@ function parseCookies(response: string[]): Map<string, string> {
 
         // page 3
         console.log('trying to submit (page 3)...');
-        await page.click('#form-container > div > div > div > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-navigation-container > div.office-form-button-container > button.office-form-theme-primary-background.office-form-theme-button.office-form-bottom-button.button-control.light-background-button.__submit-button__', { delay: 250 });
+        await page.click('#form-container > div > div > div > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-navigation-container > div.office-form-button-container > button.office-form-theme-primary-background.office-form-theme-button.office-form-bottom-button.button-control.light-background-button.__submit-button__', { delay: 400 });
 
-        await page.waitForResponse((res) => res.url() === JPSHealthURL && res.ok(),
-          { timeout: 99999 });
-        console.log('JPSHealth form berhasil di submit!');
+        await page.waitForResponse((res) => res.url() === JPSHealthURL, { timeout: 99999 });
       } catch (e) {
         console.log('gagal submit JPSHealth form');
         console.log(e);
         throw new Error(e);
       } finally {
+        console.log('Shutting down puppeteer...');
         await browser.close();
+        console.log('Puppeteer successfully shut down.');
       }
     } catch (e) {
       console.log('runtime puppeteer failed');
