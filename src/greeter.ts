@@ -61,6 +61,9 @@ function parseCookies(response: string[]): Map<string, string> {
               case 200:
                 console.log('JPSHealth form berhasil di submit!');
                 break;
+              case 201:
+                console.log('JPSHealth form berhasil di dibuat.');
+                break;
               case 400:
                 console.log('JPSHealth form has reached its submission limit.');
                 break;
