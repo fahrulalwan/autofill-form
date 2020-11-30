@@ -23,6 +23,7 @@
   },
   "scripts": {
     "compile": "tsc",
+    "execute": "node dist/greeter.js",
     "test": "tsc && node dist/greeter.js"
   }
 }
