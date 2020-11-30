@@ -6,7 +6,7 @@ import fetch from 'node-fetch';
 
 dayjs.locale('id');
 
-colors = {
+const colors = {
     reset: '\033[0m',
     black: '\033[30m',
     red: '\033[31m',
