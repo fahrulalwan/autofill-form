@@ -6,6 +6,26 @@ import fetch from 'node-fetch';
 
 dayjs.locale('id');
 
+colors = {
+    reset: '\033[0m',
+    black: '\033[30m',
+    red: '\033[31m',
+    green: '\033[32m',
+    yellow: '\033[33m',
+    blue: '\033[34m',
+    magenta: '\033[35m',
+    cyan: '\033[36m',
+    white: '\033[37m',
+    bgBlack: '\033[40m',
+    bgRed: '\033[41m',
+    bgGreen: '\033[42m',
+    bgYellow: '\033[43m',
+    bgBlue: '\033[44m',
+    bgMagenta: '\033[45m',
+    bgCyan: '\033[46m',
+    bgWhite: '\033[47m'
+};
+
 const thisExactMoment = dayjs();
 const today = thisExactMoment.day();
 const todayInDate = thisExactMoment.toDate();
@@ -59,16 +79,16 @@ function parseCookies(response: string[]): Map<string, string> {
           if (response.url() === JPSHealthURL) {
             switch (response.status()) {
               case 200:
-                console.log('JPSHealth form berhasil di submit!');
+                console.log(`${colors.green} JPSHealth form berhasil di submit!`);
                 break;
               case 201:
-                console.log('JPSHealth form berhasil di dibuat.');
+                console.log(`${colors.green} JPSHealth form berhasil di dibuat.`);
                 break;
               case 400:
-                console.log('JPSHealth form has reached its submission limit.');
+                console.log(`${colors.yellow} JPSHealth form has reached its submission limit.`);
                 break;
               default:
-                console.log('Unknown response reached, status: ', response.status());
+                console.log(`${colors.red} Unknown response reached, status: `, response.status());
                 break;
             }
           }
