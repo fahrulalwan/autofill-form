@@ -7,23 +7,29 @@ import fetch from 'node-fetch';
 dayjs.locale('id');
 
 const colors = {
-    reset: '\033[0m',
-    black: '\033[30m',
-    red: '\033[31m',
-    green: '\033[32m',
-    yellow: '\033[33m',
-    blue: '\033[34m',
-    magenta: '\033[35m',
-    cyan: '\033[36m',
-    white: '\033[37m',
-    bgBlack: '\033[40m',
-    bgRed: '\033[41m',
-    bgGreen: '\033[42m',
-    bgYellow: '\033[43m',
-    bgBlue: '\033[44m',
-    bgMagenta: '\033[45m',
-    bgCyan: '\033[46m',
-    bgWhite: '\033[47m'
+  reset: '\x1b[0m',
+  bright: '\x1b[1m',
+  dim: '\x1b[2m',
+  underscore: '\x1b[4m',
+  blink: '\x1b[5m',
+  reverse: '\x1b[7m',
+  hidden: '\x1b[8m',
+  black: '\x1b[30m',
+  red: '\x1b[31m',
+  green: '\x1b[32m',
+  yellow: '\x1b[33m',
+  blue: '\x1b[34m',
+  magenta: '\x1b[35m',
+  cyan: '\x1b[36m',
+  white: '\x1b[37m',
+  bgBlack: '\x1b[40m',
+  bgRed: '\x1b[41m',
+  bgGreen: '\x1b[42m',
+  bgYellow: '\x1b[43m',
+  bgBlue: '\x1b[44m',
+  bgMagenta: '\x1b[45m',
+  bgCyan: '\x1b[46m',
+  bgWhite: '\x1b[47m'
 };
 
 const thisExactMoment = dayjs();
@@ -52,6 +58,10 @@ function parseCookies(response: string[]): Map<string, string> {
   return cookieMap;
 }
 
+function colorizeConsole(color: string, ...messages: any[]) {
+  console.log(color, ...messages, colors.reset);
+}
+
 (async () => {
   console.group('start time', todayInDate);
   try {
@@ -68,7 +78,6 @@ function parseCookies(response: string[]): Map<string, string> {
             const responseData = JSON.parse(request.postData() as string);
             responseData.submitDate = momentsLater.toISOString();
             responseData.startDate = todayInDate.toISOString();
-            // responseData.answers = JSON.stringify(JSON.parse(responseData.answers));
             request.continue({ postData: JSON.stringify(responseData) });
           } else {
             request.continue();
@@ -79,16 +88,16 @@ function parseCookies(response: string[]): Map<string, string> {
           if (response.url() === JPSHealthURL) {
             switch (response.status()) {
               case 200:
-                console.log(`${colors.green} JPSHealth form berhasil di submit!`);
+                colorizeConsole(colors.green, 'JPSHealth form berhasil di submit');
                 break;
               case 201:
-                console.log(`${colors.green} JPSHealth form berhasil di dibuat.`);
+                colorizeConsole(colors.green, 'JPSHealth form berhasil di dibuat.');
                 break;
               case 400:
-                console.log(`${colors.yellow} JPSHealth form has reached its submission limit.`);
+                colorizeConsole(colors.yellow, 'JPSHealth form has reached its submission limit.');
                 break;
               default:
-                console.log(`${colors.red} Unknown response reached, status: `, response.status());
+                colorizeConsole(colors.red, 'Unknown response reached, status: ', response.status());
                 break;
             }
           }
@@ -183,10 +192,10 @@ function parseCookies(response: string[]): Map<string, string> {
 
       const result: string = await fifGroupFormResponse.text();
 
-      if (result.substr(result.search('Data telah berhasil disimpan'), 28) !== 'Data telah berhasil disimpan') {
-        throw new Error('data gak sampe / gak berhasil kesimpen di server');
+      if (result.substr(result.search('Data telah berhasil disimpan'), 28) === 'Data telah berhasil disimpan') {
+        colorizeConsole(colors.green, 'fifgroupForm berhasil di submit!');
       } else {
-        console.log('fifgroupForm berhasil di submit!');
+        throw new Error('data gak sampe / gak berhasil kesimpen di server');
       }
     } catch (e) {
       console.log('gagal submit fifgroupForm');
