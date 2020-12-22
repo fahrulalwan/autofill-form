@@ -34,7 +34,8 @@ const colors = {
 
 const thisExactMoment = dayjs();
 const today = thisExactMoment.day();
-const todayInDate = thisExactMoment.toDate();
+// const todayInDate = thisExactMoment.format('DD-MM-YYYY HH:mm:ss.SSSZ');
+const todayInDate = thisExactMoment.format();
 const isWeekend = today === 0 || today === 6;
 const momentsLater = thisExactMoment.add(randomInt(4, 17), 'minute').add(randomInt(1, 59), 'second').add(randomInt(1, 999), 'millisecond')
   .toDate();
@@ -77,7 +78,7 @@ function colorizeConsole(color: string, ...messages: any[]) {
           if (request.url() === JPSHealthURL) {
             const responseData = JSON.parse(request.postData() as string);
             responseData.submitDate = momentsLater.toISOString();
-            responseData.startDate = todayInDate.toISOString();
+            responseData.startDate = thisExactMoment.toISOString();
             request.continue({ postData: JSON.stringify(responseData) });
           } else {
             request.continue();
@@ -208,6 +209,6 @@ function colorizeConsole(color: string, ...messages: any[]) {
     console.log(e);
   } finally {
     console.groupEnd();
-    console.log('Tasks finished at:', dayjs().toDate(), '\n\n');
+    console.log('Tasks finished at:', dayjs().format(), '\n\n');
   }
 })();
