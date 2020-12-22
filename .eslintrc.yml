@@ -11,3 +11,4 @@ plugins:
   - '@typescript-eslint'
 rules:
   no-console: off
+  comma-dangle: off
