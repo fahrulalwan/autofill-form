@@ -37,7 +37,9 @@ const today = thisExactMoment.day();
 // const todayInDate = thisExactMoment.format('DD-MM-YYYY HH:mm:ss.SSSZ');
 const todayInDate = thisExactMoment.format();
 const isWeekend = today === 0 || today === 6;
-const momentsLater = thisExactMoment.add(randomInt(4, 17), 'minute').add(randomInt(1, 59), 'second').add(randomInt(1, 999), 'millisecond')
+const momentsLater = thisExactMoment.add(randomInt(4, 17), 'minute')
+  .add(randomInt(1, 59), 'second')
+  .add(randomInt(1, 999), 'millisecond')
   .toDate();
 
 const JPSHealthURL = 'https://forms.office.com/formapi/api/9188040d-6c67-4c5b-b112-36a304b66dad/users/00000000-0000-0000-0003-0000f112e010/forms(\'DQSIkWdsW0yxEjajBLZtrQAAAAAAAAAAAAMAAPES4BBUMUdJNjZHWkI0MUhKR0dENEJVRU1GN1IzNC4u\')/responses';
@@ -187,7 +189,8 @@ function colorizeConsole(color: string, ...messages: any[]) {
           'upgrade-insecure-requests': '1',
           cookie: parsedCookies.get('session') as string,
         },
-        body: `kehadiran=${isWeekend ? 'Libur%2C+sesuai+ketentuan+%28tanggal+merah%2C+sabtu+bagi+HO%29' : 'Kerja+Dirumah'}&statkar=Head+Office&npk=${IDENTITY.npk}&nama=${IDENTITY.name.toUpperCase().replace(' ', '+')}&koncov=tidak&suhuself=%3C37.3+C&kondisi=Sehat&zona=Tidak&zonaya=&koncovfam=tidak&kondisifam=Sehat&zonafam=Tidak&txtzonayafam=&accept=Ya`,
+        body: `kehadiran=${isWeekend ? 'Libur%2C+sesuai+ketentuan+%28tanggal+merah%2C+sabtu+bagi+HO%29' : 'Kerja+Dirumah'}&statkar=Head+Office&npk=${IDENTITY.npk}&nama=${IDENTITY.name.toUpperCase()
+          .replace(' ', '+')}}&koncov=tidak&suhuself=%3C37.3+C&kondisi=Sehat&zona=Tidak&zonaya=&koncovfam=tidak&kondisifam=Sehat&zonafam=Tidak&txtzonayafam=&vaksin=Belum+divaksin&vaksin_occ=Single&accept=Ya`,
         method: 'POST',
       });
 
@@ -209,6 +212,7 @@ function colorizeConsole(color: string, ...messages: any[]) {
     console.log(e);
   } finally {
     console.groupEnd();
-    console.log('Tasks finished at:', dayjs().format(), '\n\n');
+    console.log('Tasks finished at:', dayjs()
+      .format(), '\n\n');
   }
 })();
