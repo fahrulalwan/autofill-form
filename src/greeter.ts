@@ -143,7 +143,7 @@ function colorizeConsole(color: string, ...messages: any[]) {
 
         // page 3
         console.log('trying to submit (page 3)...');
-        await page.click('#form-container > div > div > div > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-navigation-container > div.office-form-button-container > button.office-form-theme-primary-background.office-form-theme-button.office-form-bottom-button.button-control.light-background-button.__submit-button__', { delay: 400 });
+        await page.click('#form-container > div > div > div.office-form-content.office-form-page-padding > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-navigation-container > div.office-form-button-container > button.office-form-theme-primary-background.office-form-theme-button.office-form-bottom-button.button-control.light-background-button.__submit-button__', { delay: 400 });
 
         await page.waitForResponse((res) => res.url() === JPSHealthURL, { timeout: 99999 });
       } catch (e) {
