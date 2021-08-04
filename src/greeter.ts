@@ -67,102 +67,8 @@ function colorizeConsole(color: string, ...messages: any[]) {
 
 (async () => {
   console.group('start time', todayInDate);
+
   try {
-    try {
-      console.group('JPSHEALTH FORM');
-      console.log('checking JPSHealth form status...');
-      const browser = await launch({ timeout: 99999 });
-      try {
-        const [page] = await browser.pages();
-        await page.setRequestInterception(true);
-
-        page.on('request', (request) => {
-          if (request.url() === JPSHealthURL) {
-            const responseData = JSON.parse(request.postData() as string);
-            responseData.submitDate = momentsLater.toISOString();
-            responseData.startDate = thisExactMoment.toISOString();
-            request.continue({ postData: JSON.stringify(responseData) });
-          } else {
-            request.continue();
-          }
-        });
-
-        page.on('response', async (response) => {
-          if (response.url() === JPSHealthURL) {
-            switch (response.status()) {
-              case 200:
-                colorizeConsole(colors.green, 'JPSHealth form berhasil di submit');
-                break;
-              case 201:
-                colorizeConsole(colors.green, 'JPSHealth form berhasil di dibuat.');
-                break;
-              case 400:
-                colorizeConsole(colors.yellow, 'JPSHealth form has reached its submission limit.');
-                break;
-              default:
-                colorizeConsole(colors.red, 'Unknown response reached, status: ', response.status());
-                break;
-            }
-          }
-        });
-
-        console.log('opening JPSHealth page.');
-        await page.goto('https://tiny.cc/JPSHealth', { waitUntil: 'networkidle0' });
-
-        // page 1
-        console.log('fill JPSHealth page 1.');
-        await page.type('#form-container > div > div > div > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-question-body > div:nth-child(2) > div:nth-child(1) > div > div.office-form-question-element > div > div > input', IDENTITY.name);
-        await page.click('#form-container > div > div > div > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-question-body > div:nth-child(2) > div:nth-child(2) > div > div.office-form-question-element > div > div:nth-child(1) > div > label > input[type=radio]');
-        await page.click('#form-container > div > div > div > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-question-body > div:nth-child(2) > div:nth-child(3) > div > div.office-form-question-element > div > div:nth-child(9) > div > label > input[type=radio]');
-        await page.type('#form-container > div > div > div > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-question-body > div:nth-child(2) > div:nth-child(4) > div > div.office-form-question-element > div > div > input', IDENTITY.phoneNumber);
-        await page.type('#form-container > div > div > div > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-question-body > div:nth-child(2) > div:nth-child(5) > div > div.office-form-question-element > div > div > input', IDENTITY.altPhoneNumber);
-        await page.click('#form-container > div > div > div > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-question-body > div:nth-child(2) > div:nth-child(6) > div > div.office-form-question-element > div > div:nth-child(2) > div > label > input[type=radio]');
-        await page.click('#form-container > div > div > div > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-question-body > div:nth-child(2) > div:nth-child(7) > div > div.office-form-question-element > div > div:nth-child(7) > div > label > input[type=checkbox]');
-        await page.click('#form-container > div > div > div > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-question-body > div:nth-child(2) > div:nth-child(8) > div > div.office-form-question-element > div > div:nth-child(4) > div > label > input[type=checkbox]');
-        await page.click(isWeekend ? '#form-container > div > div > div > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-question-body > div:nth-child(2) > div:nth-child(9) > div > div.office-form-question-element > div > div:nth-child(5) > div > label > input[type=radio]' : '#form-container > div > div > div > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-question-body > div:nth-child(2) > div:nth-child(9) > div > div.office-form-question-element > div > div:nth-child(1) > div > label > input[type=radio]');
-
-        await page.click('#form-container > div > div > div > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-navigation-container > div.office-form-button-container > button');
-
-        // page 2
-        console.log('fill JPSHealth page 2.');
-        await page.click('#form-container > div > div > div > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-question-body > div:nth-child(2) > div:nth-child(1) > div > div.office-form-question-element > div > div:nth-child(2) > div > label > input[type=radio]');
-        await page.click('#form-container > div > div > div > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-question-body > div:nth-child(2) > div:nth-child(2) > div > div.office-form-question-element > div > div:nth-child(2) > div > label > input[type=radio]');
-        await page.click('#form-container > div > div > div > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-question-body > div:nth-child(2) > div:nth-child(3) > div > div.office-form-question-element > div > div:nth-child(2) > div > label > input[type=radio]');
-        await page.click('#form-container > div > div > div > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-question-body > div:nth-child(2) > div:nth-child(4) > div > div.office-form-question-element > div > div:nth-child(2) > div > label > input[type=radio]');
-        await page.click('#form-container > div > div > div > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-question-body > div:nth-child(2) > div:nth-child(5) > div > div.office-form-question-element > div > div:nth-child(2) > div > label > input[type=radio]');
-        await page.click('#form-container > div > div > div > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-question-body > div:nth-child(2) > div:nth-child(6) > div > div.office-form-question-element > div > div:nth-child(2) > div > label > input[type=radio]');
-        await page.click('#form-container > div > div > div > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-question-body > div:nth-child(2) > div:nth-child(7) > div > div.office-form-question-element > div > div:nth-child(2) > div > label > input[type=radio]');
-        await page.click('#form-container > div > div > div > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-question-body > div:nth-child(2) > div:nth-child(8) > div > div.office-form-question-element > div > div:nth-child(2) > div > label > input[type=radio]');
-        await page.click('#form-container > div > div > div > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-question-body > div:nth-child(2) > div:nth-child(9) > div > div.office-form-question-element > div > div:nth-child(2) > div > label > input[type=radio]');
-        await page.click('#form-container > div > div > div > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-question-body > div:nth-child(2) > div:nth-child(10) > div > div.office-form-question-element > div > div:nth-child(2) > div > label > input[type=radio]');
-        await page.click('#form-container > div > div > div > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-question-body > div:nth-child(2) > div:nth-child(11) > div > div.office-form-question-element > div > div:nth-child(2) > div > label > input[type=radio]');
-        await page.click('#form-container > div > div > div > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-question-body > div:nth-child(2) > div:nth-child(12) > div > div.office-form-question-element > div > div:nth-child(2) > div > label > input[type=radio]');
-        await page.click('#form-container > div > div > div > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-question-body > div:nth-child(2) > div:nth-child(13) > div > div.office-form-question-element > div > div:nth-child(2) > div > label > input[type=radio]');
-
-        await page.click('#form-container > div > div > div > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-navigation-container > div.office-form-button-container > button.office-form-theme-primary-background.office-form-theme-button.office-form-bottom-button.button-control.light-background-button.section-next-button.section-button');
-
-        // page 3
-        console.log('trying to submit (page 3)...');
-        await page.click('#form-container > div > div > div.office-form-content.office-form-page-padding > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-navigation-container > div.office-form-button-container > button.office-form-theme-primary-background.office-form-theme-button.office-form-bottom-button.button-control.light-background-button.__submit-button__', { delay: 400 });
-
-        await page.waitForResponse((res) => res.url() === JPSHealthURL, { timeout: 99999 });
-      } catch (e) {
-        console.log('gagal submit JPSHealth form');
-        console.log(e);
-        throw new Error(e);
-      } finally {
-        console.log('Shutting down puppeteer...');
-        await browser.close();
-        console.log('Puppeteer successfully shut down.');
-      }
-    } catch (e) {
-      console.log('runtime puppeteer failed');
-      console.log(e);
-      throw new Error(e);
-    } finally {
-      console.groupEnd();
-    }
-
     try {
       console.group('FIFGROUP FORM');
       console.log('checking fifgroupform status...');
@@ -180,6 +86,7 @@ function colorizeConsole(color: string, ...messages: any[]) {
       const fifGroupFormCookies = fifGroupFormInit.headers.raw()['set-cookie'];
       const parsedCookies = parseCookies(fifGroupFormCookies);
 
+      console.log('trying to submit fifgroupform...');
       const fifGroupFormResponse = await fetch('http://fifgroup-form.fifgroup.co.id:5000/fifgrouphealthsurvey', {
         headers: {
           accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
@@ -202,10 +109,121 @@ function colorizeConsole(color: string, ...messages: any[]) {
         throw new Error('data gak sampe / gak berhasil kesimpen di server');
       }
     } catch (e) {
-      console.log('gagal submit fifgroupForm');
       console.log(e);
+      console.log('gagal submit fifgroupForm');
     } finally {
       console.groupEnd();
+    }
+
+    let trial = 0;
+    let isSuccess = false;
+
+    while (!isSuccess || trial < 3) {
+      try {
+        console.group('JPSHEALTH FORM');
+        console.log('checking JPSHealth form status...');
+        const browser = await launch({ timeout: 99999 });
+        try {
+          const [page] = await browser.pages();
+          await page.setRequestInterception(true);
+
+          page.on('request', (request) => {
+            if (request.url() === JPSHealthURL) {
+              const responseData = JSON.parse(request.postData() as string);
+              responseData.submitDate = momentsLater.toISOString();
+              responseData.startDate = thisExactMoment.toISOString();
+              request.continue({ postData: JSON.stringify(responseData) });
+            } else {
+              request.continue();
+            }
+          });
+
+          page.on('response', async (response) => {
+            if (response.url() === JPSHealthURL) {
+              switch (response.status()) {
+                case 200:
+                  colorizeConsole(colors.green, 'JPSHealth form berhasil di submit');
+                  break;
+                case 201:
+                  colorizeConsole(colors.green, 'JPSHealth form berhasil di dibuat.');
+                  break;
+                case 400:
+                  colorizeConsole(colors.yellow, 'JPSHealth form has reached its submission limit.');
+                  break;
+                default:
+                  colorizeConsole(colors.red, 'Unknown response reached, status: ', response.status());
+                  break;
+              }
+            }
+          });
+
+          console.log('opening JPSHealth page.');
+          await page.goto('https://tiny.cc/JPSHealth', { waitUntil: 'networkidle0' });
+
+          // page 1
+          console.log('fill JPSHealth page 1.');
+          await page.type('#form-container > div > div > div > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-question-body > div:nth-child(2) > div:nth-child(1) > div > div.office-form-question-element > div > div > input', IDENTITY.name);
+          await page.click('#form-container > div > div > div > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-question-body > div:nth-child(2) > div:nth-child(2) > div > div.office-form-question-element > div > div:nth-child(1) > div > label > input[type=radio]');
+          await page.click('#form-container > div > div > div > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-question-body > div:nth-child(2) > div:nth-child(3) > div > div.office-form-question-element > div > div:nth-child(9) > div > label > input[type=radio]');
+          await page.type('#form-container > div > div > div > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-question-body > div:nth-child(2) > div:nth-child(4) > div > div.office-form-question-element > div > div > input', IDENTITY.phoneNumber);
+          await page.type('#form-container > div > div > div > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-question-body > div:nth-child(2) > div:nth-child(5) > div > div.office-form-question-element > div > div > input', IDENTITY.altPhoneNumber);
+          await page.click('#form-container > div > div > div > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-question-body > div:nth-child(2) > div:nth-child(6) > div > div.office-form-question-element > div > div:nth-child(2) > div > label > input[type=radio]');
+          await page.click('#form-container > div > div > div > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-question-body > div:nth-child(2) > div:nth-child(7) > div > div.office-form-question-element > div > div:nth-child(7) > div > label > input[type=checkbox]');
+          await page.click('#form-container > div > div > div > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-question-body > div:nth-child(2) > div:nth-child(8) > div > div.office-form-question-element > div > div:nth-child(4) > div > label > input[type=checkbox]');
+          await page.click(isWeekend ? '#form-container > div > div > div > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-question-body > div:nth-child(2) > div:nth-child(9) > div > div.office-form-question-element > div > div:nth-child(5) > div > label > input[type=radio]' : '#form-container > div > div > div > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-question-body > div:nth-child(2) > div:nth-child(9) > div > div.office-form-question-element > div > div:nth-child(1) > div > label > input[type=radio]');
+
+          await page.click('#form-container > div > div > div > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-navigation-container > div.office-form-button-container > button');
+
+          // page 2
+          console.log('fill JPSHealth page 2.');
+          await page.click('#form-container > div > div > div > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-question-body > div:nth-child(2) > div:nth-child(1) > div > div.office-form-question-element > div > div:nth-child(2) > div > label > input[type=radio]');
+          await page.click('#form-container > div > div > div > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-question-body > div:nth-child(2) > div:nth-child(2) > div > div.office-form-question-element > div > div:nth-child(2) > div > label > input[type=radio]');
+          await page.click('#form-container > div > div > div > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-question-body > div:nth-child(2) > div:nth-child(3) > div > div.office-form-question-element > div > div:nth-child(2) > div > label > input[type=radio]');
+          await page.click('#form-container > div > div > div > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-question-body > div:nth-child(2) > div:nth-child(4) > div > div.office-form-question-element > div > div:nth-child(2) > div > label > input[type=radio]');
+          await page.click('#form-container > div > div > div > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-question-body > div:nth-child(2) > div:nth-child(5) > div > div.office-form-question-element > div > div:nth-child(2) > div > label > input[type=radio]');
+          await page.click('#form-container > div > div > div > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-question-body > div:nth-child(2) > div:nth-child(6) > div > div.office-form-question-element > div > div:nth-child(2) > div > label > input[type=radio]');
+          await page.click('#form-container > div > div > div > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-question-body > div:nth-child(2) > div:nth-child(7) > div > div.office-form-question-element > div > div:nth-child(2) > div > label > input[type=radio]');
+          await page.click('#form-container > div > div > div > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-question-body > div:nth-child(2) > div:nth-child(8) > div > div.office-form-question-element > div > div:nth-child(2) > div > label > input[type=radio]');
+          await page.click('#form-container > div > div > div > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-question-body > div:nth-child(2) > div:nth-child(9) > div > div.office-form-question-element > div > div:nth-child(2) > div > label > input[type=radio]');
+          await page.click('#form-container > div > div > div > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-question-body > div:nth-child(2) > div:nth-child(10) > div > div.office-form-question-element > div > div:nth-child(2) > div > label > input[type=radio]');
+          await page.click('#form-container > div > div > div > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-question-body > div:nth-child(2) > div:nth-child(11) > div > div.office-form-question-element > div > div:nth-child(2) > div > label > input[type=radio]');
+          await page.click('#form-container > div > div > div > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-question-body > div:nth-child(2) > div:nth-child(12) > div > div.office-form-question-element > div > div:nth-child(2) > div > label > input[type=radio]');
+          await page.click('#form-container > div > div > div > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-question-body > div:nth-child(2) > div:nth-child(13) > div > div.office-form-question-element > div > div:nth-child(2) > div > label > input[type=radio]');
+
+          await page.click('#form-container > div > div > div > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-navigation-container > div.office-form-button-container > button.office-form-theme-primary-background.office-form-theme-button.office-form-bottom-button.button-control.light-background-button.section-next-button.section-button');
+
+          // page 3
+          console.log('trying to submit (page 3)...');
+          await page.click('#form-container > div > div > div.office-form-content.office-form-page-padding > div > div.office-form.office-form-theme-shadow > div.office-form-body > div.office-form-navigation-container > div.office-form-button-container > button.office-form-theme-primary-background.office-form-theme-button.office-form-bottom-button.button-control.light-background-button.__submit-button__', { delay: 400 });
+
+          await page.waitForResponse((res) => res.url() === JPSHealthURL, { timeout: 99999 });
+
+          isSuccess = true;
+          trial = 3;
+        } catch (e) {
+          console.log('gagal submit JPSHealth form');
+          console.log(e);
+          throw new Error(e);
+        } finally {
+          console.log('Shutting down puppeteer...');
+          await browser.close();
+          console.log('Puppeteer successfully shut down.');
+        }
+      } catch (e) {
+        console.log('runtime puppeteer failed');
+        console.log(e);
+
+        trial += 1;
+        isSuccess = false;
+
+        if (trial < 3) {
+          throw new Error(e);
+        } else {
+          console.log('restarting puppeteer');
+        }
+      } finally {
+        console.groupEnd();
+      }
     }
   } catch (e) {
     console.log('System node error');

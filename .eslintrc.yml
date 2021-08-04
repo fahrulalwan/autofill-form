@@ -12,3 +12,4 @@ plugins:
 rules:
   no-console: off
   comma-dangle: off
+  no-await-in-loop: off
