@@ -216,7 +216,7 @@ function colorizeConsole(color: string, ...messages: any[]) {
         trial += 1;
         isSuccess = false;
 
-        if (trial < 3) {
+        if (trial > 2) {
           throw new Error(e);
         } else {
           console.log('restarting puppeteer');
