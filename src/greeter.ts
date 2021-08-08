@@ -158,7 +158,7 @@ function colorizeConsole(color: string, ...messages: any[]) {
           });
 
           console.log('opening JPSHealth page.');
-          await page.goto('https://tiny.cc/JPSHealth', { waitUntil: 'networkidle0' });
+          await page.goto('https://forms.office.com/Pages/ResponsePage.aspx?id=DQSIkWdsW0yxEjajBLZtrQAAAAAAAAAAAAMAAPES4BBUMUdJNjZHWkI0MUhKR0dENEJVRU1GN1IzNC4u', { waitUntil: 'networkidle0' });
 
           // page 1
           console.log('fill JPSHealth page 1.');
