@@ -97,7 +97,7 @@ function colorizeConsole(color: string, ...messages: any[]) {
           cookie: parsedCookies.get('session') as string,
         },
         body: `kehadiran=${isWeekend ? 'Libur%2C+sesuai+ketentuan+%28tanggal+merah%2C+sabtu+bagi+HO%29' : 'Kerja+Dirumah'}&statkar=Head+Office&npk=${IDENTITY.npk}&nama=${IDENTITY.name.toUpperCase()
-          .replace(' ', '+')}}&koncov=tidak&suhuself=%3C37.3+C&kondisi=Sehat&zona=Tidak&zonaya=&koncovfam=tidak&kondisifam=Sehat&zonafam=Tidak&txtzonayafam=&vaksin=Belum+divaksin&vaksin_occ=Single&accept=Ya`,
+          .replace(' ', '+')}&koncov=tidak&suhuself=%3C37.3+C&kondisi=Sehat&tgl_masuk=&tgl_antigen=&tgl_pcr=&prediksi_kontak=&kronologi=&zona=Tidak&zonaya=&koncovfam=tidak&kondisifam=Sehat&tgl_antigen_fam=&tgl_pcr_fam=&prediksi_kontak_fam=&kronologi_fam=&zonafam=Tidak&txtzonayafam=&vaksin=Sudah+divaksin&vaksin_occ=Single&accept=Ya`,
         method: 'POST',
       });
 
